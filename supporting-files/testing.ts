@@ -75,6 +75,7 @@ export function RunTest(inputRecipeSummary: any) {
             //     }CORRECT ANSWER`
             // );
 
+            // I use lodash for simple object equal comparison. JSON stringify not sense as different implementation may result in different object keys order
             console.log(
                 `CHECKING RECIPE "${recipeName}" --- ${
                     !_.isEqual(expectedObj, receivedObj) ? "IN" : ""

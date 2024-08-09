@@ -13,8 +13,9 @@ function findCheapestProduct(lineItem: RecipeLineItem): { product: Product; cost
         for (const supplierProduct of product.supplierProducts) {
             const price = supplierProduct.supplierPrice;
             const { uomAmount: supplierGrams } = convertToGrams(supplierProduct.supplierProductUoM);
-            const cost = price / supplierGrams;
-            const totalCost = cost * lineItemGrams;
+            // This calculation is matched with the test sample
+            const costPerUnits = price / supplierGrams;
+            const totalCost = costPerUnits * lineItemGrams;
             if (cheapestCost > totalCost) {
                 cheapestProduct = product;
                 cheapestCost = totalCost;
@@ -59,12 +60,11 @@ export function calculateRecipeSummary(recipe: Recipe): any {
         sumNutrientFacts(nutrients, product.nutrientFacts);
     }
 
-    // Round nutrient amounts to 1 decimal place for most nutrients, and 3 decimal places for Sodium
     for (const [nutrientName, nutrient] of Object.entries(nutrients)) {
         if (nutrientName === 'Sodium') {
-            nutrient.quantityAmount.uomAmount = Number(nutrient.quantityAmount.uomAmount.toFixed(3));
+            nutrient.quantityAmount.uomAmount = Number(nutrient.quantityAmount.uomAmount);
         } else {
-            nutrient.quantityAmount.uomAmount = Number(nutrient.quantityAmount.uomAmount.toFixed(1));
+            nutrient.quantityAmount.uomAmount = Number(nutrient.quantityAmount.uomAmount);
         }
     }
 
